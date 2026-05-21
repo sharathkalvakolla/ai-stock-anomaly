@@ -1,0 +1,31 @@
+{
+  "symbol": "AMZN",
+  "start": "2020-01-01",
+  "end": "2024-01-01",
+  "train_ratio": 0.75,
+  "feature_columns": [
+    "Daily_Return",
+    "MA_10",
+    "MA_20",
+    "Volatility",
+    "Rolling_STD",
+    "Volume_Change",
+    "RSI",
+    "MACD",
+    "MACD_Signal",
+    "MACD_Hist",
+    "BB_Upper",
+    "BB_Lower",
+    "BB_Width",
+    "BB_Position",
+    "Volume_MA_20"
+  ],
+  "split_idx": 740,
+  "n_total": 987,
+  "n_train": 740,
+  "n_test": 247,
+  "train_start": "2020-01-30 00:00:00",
+  "train_end": "2023-01-05 00:00:00",
+  "test_start": "2023-01-06 00:00:00",
+  "test_end": "2023-12-29 00:00:00"
+}

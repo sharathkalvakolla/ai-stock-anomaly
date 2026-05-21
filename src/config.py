@@ -20,8 +20,13 @@ DEFAULT_START_DATE = "2020-01-01"
 DEFAULT_END_DATE = "2024-01-01"
 OHLCV_COLUMNS = ["Open", "High", "Low", "Close", "Volume"]
 
-# Feature engineering
-FEATURE_COLUMNS = [
+# Time-series integrity
+TRAIN_RATIO = 0.75
+SPLIT_COLUMN = "Split"
+ENABLE_ROLLING_WINDOW_TRAINING = False
+
+# Original 6 features
+BASE_FEATURE_COLUMNS = [
     "Daily_Return",
     "MA_10",
     "MA_20",
@@ -30,11 +35,33 @@ FEATURE_COLUMNS = [
     "Volume_Change",
 ]
 
+# New technical indicator features
+TECHNICAL_INDICATOR_COLUMNS = [
+    "RSI",
+    "MACD",
+    "MACD_Signal",
+    "MACD_Hist",
+    "BB_Upper",
+    "BB_Lower",
+    "BB_Width",
+    "BB_Position",
+    "Volume_MA_20",
+]
+
+# All features combined (used by models)
+FEATURE_COLUMNS = BASE_FEATURE_COLUMNS + TECHNICAL_INDICATOR_COLUMNS
+
 ROLLING_WINDOWS = {
     "ma_short": 10,
     "ma_long": 20,
     "volatility": 10,
     "rolling_std": 5,
+    "rsi": 14,
+    "macd_fast": 12,
+    "macd_slow": 26,
+    "macd_signal": 9,
+    "bb_period": 20,
+    "volume_ma": 20,
 }
 
 # Isolation Forest
@@ -58,3 +85,12 @@ RESULTS_CSV_NAME = "stock_anomaly_results.csv"
 ISO_MODEL_NAME = "isolation_forest.joblib"
 SVM_MODEL_NAME = "one_class_svm.joblib"
 SCALER_NAME = "feature_scaler.joblib"
+METADATA_NAME = "training_metadata.json"
+
+# Explainability
+EXPLAIN_TOP_K = 3
+
+# LSTM autoencoder
+LSTM_SEQUENCE_LENGTH = 10
+LSTM_EPOCHS = 50
+LSTM_BATCH_SIZE = 32

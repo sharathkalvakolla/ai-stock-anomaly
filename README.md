@@ -1,189 +1,93 @@
-# Stock Anomaly AI
+# Stock Anomaly AI 📈
 
-Production-style Python pipeline for **unsupervised stock price anomaly detection** using **Isolation Forest** and **One-Class SVM**. Built for portfolio showcase, recruiter review, and future **Streamlit** deployment.
-
-![Python](https://img.shields.io/badge/Python-3.10%2B-blue)
+![Python](https://img.shields.io/badge/Python-3.11-blue)
+![Streamlit](https://img.shields.io/badge/Streamlit-App-red)
 ![scikit-learn](https://img.shields.io/badge/scikit--learn-ML-orange)
-![License](https://img.shields.io/badge/License-MIT-green)
+![TensorFlow](https://img.shields.io/badge/TensorFlow-LSTM-ff6f00)
+![Docker](https://img.shields.io/badge/Docker-Ready-2496ed)
 
----
+Stock Anomaly AI detects unusual market behavior from OHLCV data using a strict temporal split (75% train, 25% test) to avoid look-ahead bias. It combines Isolation Forest, One-Class SVM, and an LSTM Autoencoder with interactive explainability, multi-stock comparison, and educational backtesting.
 
-## Overview
-
-This project downloads historical OHLCV data via **yFinance**, engineers technical features (returns, moving averages, volatility, volume change), trains two complementary anomaly detectors, and exports labeled results with visualizations.
-
-| Component | Technology |
-|-----------|------------|
-| Data source | yFinance |
-| Feature engineering | Pandas / NumPy |
-| Models | Isolation Forest, One-Class SVM |
-| Scaling | StandardScaler |
-| Persistence | joblib, CSV |
-| Visualization | Matplotlib |
-| UI (optional) | Streamlit |
-
----
-
-## Project Structure
-
-```
-stock-anomaly-ai/
-├── data/
-│   ├── raw/              # Downloaded OHLCV (stock_raw.csv)
-│   └── processed/        # Cleaned data (stock_processed.csv)
-├── models/               # Trained scaler + models (.joblib)
-├── outputs/              # Results CSV + chart PNGs
-├── src/
-│   ├── config.py         # Paths, hyperparameters, feature list
-│   ├── data_collection.py
-│   ├── preprocessing.py
-│   ├── feature_engineering.py
-│   ├── model_training.py
-│   ├── anomaly_detection.py
-│   ├── visualization.py
-│   └── utils.py
-├── app/
-│   └── streamlit_app.py  # Interactive dashboard stub
-├── main.py               # CLI pipeline entry point
-├── requirements.txt
-├── .gitignore
-└── README.md
-```
-
----
-
-## Quick Start
-
-### 1. Clone and enter the project
-
-```bash
-cd stock-anomaly-ai
-```
-
-### 2. Create a virtual environment (recommended)
-
-```bash
-python -m venv venv
-# Windows
-venv\Scripts\activate
-# macOS / Linux
-source venv/bin/activate
-```
-
-### 3. Install dependencies
-
-```bash
-pip install -r requirements.txt
-```
-
-### 4. Run the pipeline
-
-```bash
-python main.py
-```
-
-Custom ticker and date range:
-
-```bash
-python main.py --symbol MSFT --start 2019-01-01 --end 2023-12-31
-```
-
-Save plots to `outputs/` without displaying:
-
-```bash
-python main.py --no-plots --save-plots
-```
-
----
-
-## Pipeline Flow
+## Architecture
 
 ```mermaid
-flowchart LR
-    A[yFinance Download] --> B[Preprocessing]
+graph TD
+    A[yfinance Data] --> B[Preprocessing]
     B --> C[Feature Engineering]
-    C --> D[StandardScaler]
-    D --> E[Isolation Forest]
-    D --> F[One-Class SVM]
-    E --> G[Results CSV]
-    F --> G
-    G --> H[Matplotlib Charts]
+    C --> D[Temporal Split 75/25]
+    D --> E[Train Models]
+    E --> F[Isolation Forest]
+    E --> G[One-Class SVM]
+    E --> H[LSTM Autoencoder]
+    F & G & H --> I[Anomaly Detection]
+    I --> J[Streamlit Dashboard]
+    J --> K[AI Explainer]
+    J --> L[Backtesting]
+    J --> M[Multi-Stock Compare]
 ```
 
-1. **Data collection** — Download OHLCV → `data/raw/stock_raw.csv`
-2. **Preprocessing** — Drop NaNs, normalize dates → `data/processed/stock_processed.csv`
-3. **Feature engineering** — Returns, MAs, volatility, volume change
-4. **Training** — Fit scaler + both models → `models/*.joblib`
-5. **Detection** — Binary anomaly flags → `outputs/stock_anomaly_results.csv`
-6. **Visualization** — Price charts with anomaly markers
+## Features
 
----
+- 📊 Interactive Streamlit dashboard with 8 analysis tabs
+- 🧠 Three anomaly models: Isolation Forest, One-Class SVM, LSTM Autoencoder
+- 🔎 AI anomaly explainer with feature-level reason codes and severity badge
+- 📈 Technical indicators: RSI, MACD, Bollinger Bands, volatility
+- 🧪 Backtesting simulation (educational) vs buy-and-hold baseline
+- 🏷️ Multi-stock comparison with anomaly rates and return correlation heatmap
 
-## Features Used for Detection
-
-| Feature | Description |
-|---------|-------------|
-| `Daily_Return` | Daily % change in close price |
-| `MA_10` / `MA_20` | 10- and 20-day moving averages |
-| `Volatility` | 10-day rolling std of close |
-| `Rolling_STD` | 5-day rolling std of close |
-| `Volume_Change` | Daily % change in volume |
-
-Hyperparameters live in `src/config.py` and can be tuned without changing pipeline logic.
-
----
-
-## Streamlit Dashboard (Optional)
+## How To Run Locally
 
 ```bash
-pip install streamlit
+python -m venv .venv
+.venv\Scripts\activate
+pip install -r requirements.txt
 streamlit run app/streamlit_app.py
 ```
 
-Use the sidebar to set ticker, date range, and run the full pipeline interactively.
+## How To Run With Docker
 
----
+```bash
+docker build -t stock-anomaly-ai .
+docker run --rm -p 8501:8501 stock-anomaly-ai
+```
 
-## Outputs
+## Project Structure
 
-| Artifact | Location |
-|----------|----------|
-| Raw data | `data/raw/stock_raw.csv` |
-| Processed data | `data/processed/stock_processed.csv` |
-| Trained models | `models/isolation_forest.joblib`, `models/one_class_svm.joblib`, `models/feature_scaler.joblib` |
-| Results | `outputs/stock_anomaly_results.csv` |
-| Charts (optional) | `outputs/iso_anomaly_chart.png`, `outputs/svm_anomaly_chart.png` |
+```text
+stock-anomaly-ai/
+├── app/
+│   └── streamlit_app.py
+├── src/
+│   ├── anomaly_detection.py
+│   ├── backtesting.py
+│   ├── config.py
+│   ├── data_collection.py
+│   ├── explainer.py
+│   ├── explainability.py
+│   ├── feature_engineering.py
+│   ├── lstm_autoencoder.py
+│   ├── model_training.py
+│   ├── pipeline.py
+│   ├── preprocessing.py
+│   ├── utils.py
+│   └── visualization.py
+├── data/
+├── models/
+├── outputs/
+├── Dockerfile
+├── requirements.txt
+└── README.md
+```
 
-Results CSV includes original OHLCV, engineered features, and `Iso_Anomaly` / `SVM_Anomaly` columns (`1` = anomaly, `0` = normal).
+## Limitations
 
----
+- Educational tool only; not financial advice or a production trading system.
+- Backtesting is simplified and excludes slippage, fees, and market impact.
+- Unsupervised anomalies are statistical outliers, not guaranteed trade signals.
+- LSTM model availability depends on TensorFlow installation/runtime.
 
-## Design Decisions
+## Tech Stack
 
-- **Modular `src/` package** — Each stage is a separate module with typed functions and docstrings for testability and reuse.
-- **Centralized config** — Paths and model params in one place for easy experimentation.
-- **Model persistence** — joblib artifacts support inference-only runs and Streamlit reload.
-- **CLI + library API** — `main.py` orchestrates the pipeline; modules can be imported independently.
-
----
-
-## Future Enhancements
-
-- [ ] Unit tests (`pytest`) for preprocessing and feature engineering
-- [ ] Hyperparameter tuning (GridSearch / Optuna)
-- [ ] Additional tickers and batch processing
-- [ ] LSTM / autoencoder baseline for comparison
-- [ ] Docker + CI workflow
-- [ ] Full Streamlit charts (Plotly) and model comparison view
-
----
-
-## Author
-
-Built as an end-to-end ML portfolio project demonstrating clean architecture, unsupervised learning, and financial time-series feature engineering.
-
----
-
-## License
-
-MIT — free to use for learning and portfolio purposes.
+- Python, pandas, numpy, scikit-learn, TensorFlow/Keras
+- Streamlit, Plotly, matplotlib
+- yfinance, joblib, Docker
