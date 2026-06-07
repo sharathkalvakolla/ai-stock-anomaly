@@ -1,30 +1,54 @@
-# Stock Anomaly AI 📈
+# 📈 AI Stock Anomaly Detection
 
-![Python](https://img.shields.io/badge/Python-3.11-blue)
-![Streamlit](https://img.shields.io/badge/Streamlit-App-red)
-![scikit-learn](https://img.shields.io/badge/scikit--learn-ML-orange)
-![TensorFlow](https://img.shields.io/badge/TensorFlow-LSTM-ff6f00)
-![Docker](https://img.shields.io/badge/Docker-Ready-2496ed)
+**Major Project | Temporal Train/Test Split | Unsupervised Machine Learning**
 
-Stock Anomaly AI detects unusual market behavior from OHLCV data using a strict temporal split (75% train, 25% test) to avoid look-ahead bias. It combines Isolation Forest, One-Class SVM, and an LSTM Autoencoder with interactive explainability, multi-stock comparison, and educational backtesting.
+A modern Streamlit dashboard for detecting anomalies in stock price data using Isolation Forest, One-Class SVM, and LSTM Autoencoder with proper **temporal (time-series) validation** to avoid look-ahead bias.
 
-## Architecture
+![Demo](https://via.placeholder.com/800x400?text=Project+Dashboard+Screenshot)
 
-```mermaid
-graph TD
-    A[yfinance Data] --> B[Preprocessing]
-    B --> C[Feature Engineering]
-    C --> D[Temporal Split 75/25]
-    D --> E[Train Models]
-    E --> F[Isolation Forest]
-    E --> G[One-Class SVM]
-    E --> H[LSTM Autoencoder]
-    F & G & H --> I[Anomaly Detection]
-    I --> J[Streamlit Dashboard]
-    J --> K[AI Explainer]
-    J --> L[Backtesting]
-    J --> M[Multi-Stock Compare]
-```
+## ✨ Features
+
+- **Temporal Train/Test Split** (No data leakage)
+- Multiple Anomaly Detection Models:
+  - Isolation Forest
+  - One-Class SVM
+  - LSTM Autoencoder (Optional)
+- Interactive **Candlestick Chart** with anomaly highlighting
+- **Technical Indicators** (RSI, MACD, Bollinger Bands)
+- Feature Distributions + Correlation Heatmaps
+- Explainability & AI-based anomaly interpretation
+- Backtesting Simulation (Strategy vs Buy & Hold)
+- Multi-Stock Comparison with correlation analysis
+- Model persistence with joblib + caching for fast reloads
+
+## 🛠 Tech Stack
+
+- **Frontend**: Streamlit
+- **Visualization**: Plotly, Matplotlib
+- **ML Models**: scikit-learn, TensorFlow (LSTM)
+- **Data**: yfinance
+- **Others**: Pandas, NumPy, Joblib
+
+## 🚀 How to Run Locally
+
+```bash
+# 1. Clone the repository
+git clone https://github.com/sharathkalvakolla/ai-stock-anomaly.git
+cd ai-stock-anomaly
+
+# 2. Create virtual environment
+python -m venv .venv
+.venv\Scripts\activate     # Windows
+# source .venv/bin/activate # Linux/Mac
+
+# 3. Install dependencies
+pip install -r requirements.txt
+
+# 4. Run the dashboard
+streamlit run app/streamlit_app.py
+
+
+
 
 ## Features
 
@@ -52,29 +76,22 @@ docker run --rm -p 8501:8501 stock-anomaly-ai
 ```
 
 ## Project Structure
-
-```text
+```
 stock-anomaly-ai/
 ├── app/
-│   └── streamlit_app.py
+│   └── streamlit_app.py          # Main Dashboard
 ├── src/
-│   ├── anomaly_detection.py
-│   ├── backtesting.py
 │   ├── config.py
 │   ├── data_collection.py
-│   ├── explainer.py
-│   ├── explainability.py
-│   ├── feature_engineering.py
-│   ├── lstm_autoencoder.py
-│   ├── model_training.py
-│   ├── pipeline.py
 │   ├── preprocessing.py
-│   ├── utils.py
-│   └── visualization.py
+│   ├── feature_engineering.py
+│   ├── model_training.py
+│   ├── anomaly_detection.py
+│   ├── visualization.py
+│   └── ...
+├── models/                        Saved models
+├── outputs/                       Results
 ├── data/
-├── models/
-├── outputs/
-├── Dockerfile
 ├── requirements.txt
 └── README.md
 ```
