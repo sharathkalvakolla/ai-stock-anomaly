@@ -25,6 +25,7 @@ from src.model_training import (
     train_models_on_train_split,
 )
 from src.preprocessing import clean_data, save_processed_data, temporal_train_test_split
+from src.utils import ensure_project_dirs
 
 logger = logging.getLogger(__name__)
 
@@ -43,8 +44,16 @@ def run_temporal_pipeline(
     Returns:
         (results_df, summary_dict, split_info)
     """
-    remove_stale_model_artifacts()
+    ensure_project_dirs()
+
+    # Streamlit Cloud safety:
+    # When save=False we must not perform destructive model-artifact
+    # operations (deletes/overwrites) that can race across concurrent users.
+    if save:
+        remove_stale_model_artifacts()
+
     raw = download_stock_data(symbol=symbol, start=start, end=end, save=save)
+
     cleaned = clean_data(raw, reset_index=True)
     if save:
         save_processed_data(cleaned)

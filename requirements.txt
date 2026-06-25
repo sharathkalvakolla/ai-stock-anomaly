@@ -1,19 +1,10 @@
-# Data
-yfinance==0.2.54
+streamlit==1.46.1
 pandas==2.2.3
 numpy==1.26.4
-
-# Machine Learning
 scikit-learn==1.5.2
+plotly==5.24.1
+yfinance==0.2.65
 joblib==1.4.2
-tensorflow==2.16.2
+scipy==1.14.1
 
-# Technical Indicators
-ta==0.11.0
 
-# Visualization
-matplotlib==3.9.2
-plotly==5.22.0
-
-# Dashboard
-streamlit==1.40.1
